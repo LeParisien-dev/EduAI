@@ -3,12 +3,26 @@ services:
     name: edu-ai-backend
     env: docker
     plan: free
-    buildCommand: ""   # inutile car Dockerfile gère déjà le build
-    startCommand: ""   # inutile car CMD dans le Dockerfile = node dist/main
+
+    # [AJOUT] Contexte & Dockerfile explicites pour le monorepo
+    dockerContext: .                       # [AJOUT]
+    dockerfilePath: apps/backend/Dockerfile # [AJOUT]
+
+    # [AJOUT] Branche & déploiements auto
+    branch: main                            # adapte si ta branche par défaut ≠ main
+    autoDeploy: true                        # [AJOUT]
+
+    # [AJOUT] Health check si tu exposes GET /health (sinon supprime cette ligne)
+    healthCheckPath: /health
+
+    # [MODIF] Pas de build/start command en mode Docker
+    buildCommand: ""
+    startCommand: ""
+
     envVars:
       - key: DATABASE_URL
         sync: false
       - key: DATABASE_SSL
-        sync: false
+        value: true        # [MODIF] on force true ici (pas besoin de la saisir à la main)
       - key: JWT_SECRET
         sync: false

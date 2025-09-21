@@ -1,3 +1,15 @@
+# [EXISTANT]
 node_modules
 dist
 .env
+
+# [AJOUT]
+.DS_Store
+*.log
+pnpm-debug.log
+npm-debug.log
+.git
+.github
+coverage
+tmp
+.pnpm-store
