@@ -1,0 +1,20 @@
+{
+    "name": "edu-ai",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "apps/*",
+        "services/*",
+        "libs/*",
+        "ai/*"
+    ],
+    "scripts": {
+        "dev": "echo \"Choisis l'app à lancer (frontend ou backend)\"",
+        "build": "echo \"Build global des apps\"",
+        "lint": "echo \"Lint global des apps\""
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "packageManager": "pnpm@10.15.1"
+}

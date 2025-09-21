@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: edu-ai-backend
+    env: docker
+    plan: free
+    buildCommand: ""   # inutile car Dockerfile gère déjà le build
+    startCommand: ""   # inutile car CMD dans le Dockerfile = node dist/main
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: DATABASE_SSL
+        sync: false
+      - key: JWT_SECRET
+        sync: false
