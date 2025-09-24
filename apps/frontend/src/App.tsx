@@ -1,11 +1,10 @@
-// src/App.tsx
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
-import { AuthProvider } from "./context/AuthContext";
-import Register from "./pages/Register";
-import Login from "./pages/Login";
-import Landing from "./pages/Landing";
-import Courses from "./pages/Courses";
-import PrivateRoute from "./components/PrivateRoute";
+import { AuthProvider } from "./context/AuthContext.tsx";
+import Register from "./pages/Register.tsx";
+import Login from "./pages/Login.tsx";
+import Landing from "./pages/Landing.tsx";
+import Courses from "./pages/Courses.tsx";
+import PrivateRoute from "./components/PrivateRoute.tsx";
 
 function App() {
   return (

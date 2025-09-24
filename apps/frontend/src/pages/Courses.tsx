@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import { api } from "../api";
-import { useAuth } from "../context/AuthContext";
+import { api } from "../api/index.ts";
+import { useAuth } from "../context/AuthContext.tsx";
 
 interface Course {
     id: string;
