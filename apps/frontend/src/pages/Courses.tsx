@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { api } from "../api/index.ts";
 import { useAuth } from "../context/AuthContext.tsx";
 
@@ -21,9 +22,7 @@ export default function Courses() {
     async function fetchCourses() {
         try {
             const data = await api("/courses", {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
             setCourses(data);
         } catch (err: any) {
@@ -50,7 +49,7 @@ export default function Courses() {
             });
             setTitle("");
             setDescription("");
-            fetchCourses(); // recharge la liste
+            fetchCourses();
         } catch (err: any) {
             alert("Erreur : " + err.message);
         }
@@ -60,11 +59,9 @@ export default function Courses() {
         try {
             await api(`/courses/${id}/publish`, {
                 method: "PATCH",
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             });
-            fetchCourses(); // recharger après publication
+            fetchCourses();
         } catch (err: any) {
             alert("Erreur publication : " + err.message);
         }
@@ -74,74 +71,84 @@ export default function Courses() {
     if (error) return <p className="text-red-500 text-center mt-10">Erreur : {error}</p>;
 
     return (
-        <div className="max-w-3xl mx-auto p-6 space-y-8">
+        <div className="max-w-5xl mx-auto p-8 space-y-10">
             {/* Header */}
             <div className="flex justify-between items-center">
-                <h2 className="text-3xl font-bold">Mes cours</h2>
+                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">
+                    Mes cours
+                </h1>
                 <button
                     onClick={logout}
-                    className="bg-red-500 px-4 py-2 rounded hover:bg-red-600"
+                    className="px-4 py-2 rounded-lg bg-red-500 text-white hover:bg-red-600 transition"
                 >
                     Déconnexion
                 </button>
             </div>
 
             {/* Formulaire création */}
-            <form
+            <motion.form
                 onSubmit={handleCreateCourse}
-                className="bg-gray-800 p-4 rounded space-y-4"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.6 }}
+                className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-md space-y-4"
             >
-                <h3 className="text-xl font-semibold">Créer un nouveau cours</h3>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                    Créer un nouveau cours
+                </h2>
                 <input
                     type="text"
                     placeholder="Titre"
                     value={title}
                     onChange={(e) => setTitle(e.target.value)}
-                    className="border p-2 w-full rounded bg-gray-900 text-white"
+                    className="border border-gray-300 dark:border-gray-700 p-3 w-full rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary"
                     required
                 />
                 <textarea
                     placeholder="Description"
                     value={description}
                     onChange={(e) => setDescription(e.target.value)}
-                    className="border p-2 w-full rounded bg-gray-900 text-white"
+                    className="border border-gray-300 dark:border-gray-700 p-3 w-full rounded-lg bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-primary"
                     required
                 />
                 <button
                     type="submit"
-                    className="bg-cyan-600 px-4 py-2 rounded hover:bg-cyan-500"
+                    className="px-4 py-2 rounded-lg bg-primary text-white hover:bg-primary-light transition"
                 >
                     Ajouter
                 </button>
-            </form>
+            </motion.form>
 
             {/* Liste des cours */}
             {courses.length === 0 ? (
-                <p className="text-gray-400">Aucun cours créé.</p>
+                <p className="text-gray-500 dark:text-gray-400">
+                    Aucun cours créé.
+                </p>
             ) : (
-                <ul className="space-y-4">
-                    {courses.map((course) => (
-                        <li
+                <div className="grid md:grid-cols-2 gap-6">
+                    {courses.map((course, i) => (
+                        <motion.div
                             key={course.id}
-                            className="bg-gray-800 p-4 rounded-lg shadow hover:bg-gray-700 transition"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.4, delay: i * 0.1 }}
+                            className="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow hover:shadow-lg transition"
                         >
-                            <h3 className="text-xl font-semibold">{course.title}</h3>
-                            <p className="text-gray-400">{course.description}</p>
-                            <p className="text-sm text-cyan-400 mb-2">
-                                Statut : {course.status}
-                            </p>
+                            <h3 className="text-xl font-semibold text-primary">{course.title}</h3>
+                            <p className="text-gray-600 dark:text-gray-300 mt-2">{course.description}</p>
+                            <p className="text-sm text-cyan-500 mb-3">Statut : {course.status}</p>
 
                             {course.status === "draft" && (
                                 <button
                                     onClick={() => handlePublishCourse(course.id)}
-                                    className="bg-green-600 px-3 py-1 rounded hover:bg-green-500"
+                                    className="px-3 py-1 rounded-lg bg-green-600 text-white hover:bg-green-500 transition"
                                 >
                                     Publier
                                 </button>
                             )}
-                        </li>
+                        </motion.div>
                     ))}
-                </ul>
+                </div>
             )}
         </div>
     );

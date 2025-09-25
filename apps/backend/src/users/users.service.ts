@@ -17,15 +17,8 @@ export class UsersService {
     async create(data: { email: string; username: string; passwordHash: string }): Promise<User> {
         console.log('👉 Tentative d’insertion utilisateur:', data);
 
-        // on insère directement pour éviter tout doublon implicite
-        await this.usersRepo.insert({
-            email: data.email,
-            username: data.username,
-            passwordHash: data.passwordHash,
-        });
-
-        // on relit l’utilisateur en base pour le retourner
-        const user = await this.findByEmail(data.email);
-        return user!;
+        // ✅ utilise create + save plutôt que insert
+        const user = this.usersRepo.create(data);
+        return await this.usersRepo.save(user);
     }
 }

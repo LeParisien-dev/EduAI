@@ -6,6 +6,10 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 
+// ✅ On importe AppController et AppService
+import { AppController } from './app.controller';
+import { AppService } from './app.service';
+
 @Module({
   imports: [
     // ✅ Charge les variables depuis apps/backend/.env ou .env racine
@@ -19,10 +23,10 @@ import { CoursesModule } from './courses/courses.module';
       useFactory: () => ({
         type: 'postgres',
         url: process.env.DATABASE_URL,
-        autoLoadEntities: true, // plus besoin de lister User, Course à la main
-        synchronize: false,     // on passe par les migrations
+        autoLoadEntities: true,
+        synchronize: false, // on passe par les migrations
         ssl: true,
-        extra: { ssl: { rejectUnauthorized: false } }, // simplifie la config SSL Neon
+        extra: { ssl: { rejectUnauthorized: false } },
         logging: process.env.NODE_ENV !== 'production',
       }),
     }),
@@ -31,5 +35,7 @@ import { CoursesModule } from './courses/courses.module';
     AuthModule,
     CoursesModule,
   ],
+  controllers: [AppController], // ✅ ajoute ton AppController
+  providers: [AppService],      // ✅ ajoute ton AppService
 })
 export class AppModule { }
