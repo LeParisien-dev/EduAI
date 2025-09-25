@@ -5,8 +5,16 @@ import { ValidationPipe } from '@nestjs/common';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
-  app.useGlobalPipes(new ValidationPipe({ whitelist: true }));
+  // Validation globale des DTO
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
 
+  // CORS activé pour le frontend local
   app.enableCors({
     origin: ['http://localhost:5173'],
     credentials: true,
