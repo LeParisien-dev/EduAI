@@ -1,4 +1,3 @@
-// tailwind.config.js
 theme: {
     extend: {
         colors: {

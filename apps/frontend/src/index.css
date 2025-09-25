@@ -1,7 +1,7 @@
 @import "tailwindcss/preflight";
 @tailwind utilities;
 
-/* ✅ Reset & optimisations */
+/* Reset & optimisations */
 :root {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -9,7 +9,7 @@
   font-synthesis: none;
 }
 
-/* ✅ Classes utilitaires globales */
+/* Classes utilitaires globales */
 .card {
   @apply bg-neutral-card border border-neutral-border rounded-2xl shadow-card p-6;
 }

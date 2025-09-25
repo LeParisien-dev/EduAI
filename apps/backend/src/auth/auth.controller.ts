@@ -20,7 +20,7 @@ export class AuthController {
         return this.authService.login(user);
     }
 
-    // ✅ Route protégée
+    // Route protégée
     @UseGuards(JwtAuthGuard)
     @Get('me')
     getProfile(@Request() req: ExpressRequest) {

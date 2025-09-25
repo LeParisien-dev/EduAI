@@ -30,7 +30,7 @@ export class CoursesService {
         const course = this.coursesRepo.create({
             ...createDto,
             createdBy: user,
-            createdById: user.id, // on fixe aussi la FK
+            createdById: user.id,
             status: 'draft',
         });
 
@@ -45,7 +45,7 @@ export class CoursesService {
     async findPublished(): Promise<Course[]> {
         return this.coursesRepo.find({
             where: { status: 'published' },
-            order: { createdAt: 'DESC' }, // tri du plus récent au plus ancien
+            order: { createdAt: 'DESC' },
         });
     }
 

@@ -15,7 +15,7 @@ export class AuthService {
 
     // --- REGISTER ---
     async register(data: RegisterDto): Promise<Omit<User, 'passwordHash'>> {
-        // ✅ Vérifier si l'email est déjà utilisé
+        // Vérifier si l'email est déjà utilisé
         const existing = await this.usersService.findByEmail(data.email);
         if (existing) {
             throw new ConflictException('Email déjà utilisé');

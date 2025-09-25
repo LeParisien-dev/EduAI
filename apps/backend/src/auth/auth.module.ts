@@ -11,18 +11,18 @@ import { JwtStrategy } from './jwt.strategy';
 @Module({
     imports: [
         UsersModule,
-        ConfigModule,         // déjà global dans AppModule, on le garde ici
-        PassportModule,       // CHANGEMENT: nécessaire pour AuthGuard('jwt')
+        ConfigModule,
+        PassportModule,
         JwtModule.registerAsync({
             imports: [ConfigModule],
             inject: [ConfigService],
             useFactory: async (config: ConfigService) => ({
-                secret: config.getOrThrow<string>('JWT_SECRET'), // CHANGEMENT
+                secret: config.getOrThrow<string>('JWT_SECRET'),
                 signOptions: { expiresIn: '1h' },
             }),
         }),
     ],
-    providers: [AuthService, JwtStrategy], // CHANGEMENT: on enregistre la stratégie
+    providers: [AuthService, JwtStrategy],
     controllers: [AuthController],
     exports: [AuthService],
 })

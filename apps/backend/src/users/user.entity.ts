@@ -7,7 +7,7 @@ import {
 } from 'typeorm';
 import { Course } from '../courses/course.entity';
 
-@Entity('user') // ✅ nom explicite de la table
+@Entity('user')
 export class User {
     @PrimaryGeneratedColumn('uuid')
     id!: string;
@@ -24,7 +24,6 @@ export class User {
     @OneToMany(() => Course, (course) => course.createdBy)
     courses!: Course[];
 
-    // ✅ Ajout de la date de création automatique
     @CreateDateColumn({ name: 'created_at' })
     createdAt!: Date;
 }

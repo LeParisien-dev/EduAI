@@ -17,7 +17,6 @@ export class UsersService {
     async create(data: { email: string; username: string; passwordHash: string }): Promise<User> {
         console.log('👉 Tentative d’insertion utilisateur:', data);
 
-        // ✅ utilise create + save plutôt que insert
         const user = this.usersRepo.create(data);
         return await this.usersRepo.save(user);
     }

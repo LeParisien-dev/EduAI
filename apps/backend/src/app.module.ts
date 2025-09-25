@@ -6,19 +6,16 @@ import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
 import { CoursesModule } from './courses/courses.module';
 
-// ✅ On importe AppController et AppService
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 
 @Module({
   imports: [
-    // ✅ Charge les variables depuis apps/backend/.env ou .env racine
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: ['apps/backend/.env', '.env'],
     }),
 
-    // ✅ Connexion à Neon via DATABASE_URL (pooled)
     TypeOrmModule.forRootAsync({
       useFactory: () => ({
         type: 'postgres',
@@ -35,7 +32,7 @@ import { AppService } from './app.service';
     AuthModule,
     CoursesModule,
   ],
-  controllers: [AppController], // ✅ ajoute ton AppController
-  providers: [AppService],      // ✅ ajoute ton AppService
+  controllers: [AppController],
+  providers: [AppService],
 })
 export class AppModule { }

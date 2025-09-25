@@ -23,7 +23,6 @@ export class Course {
     @Column({ default: 'draft' })
     status!: 'draft' | 'published';
 
-    // FK explicite
     @Column({ name: 'createdById', type: 'uuid' })
     createdById!: string;
 
