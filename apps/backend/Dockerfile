@@ -6,16 +6,16 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
 COPY apps/backend ./apps/backend
-COPY libs ./libs   # <-- AJOUT si tu utilises des libs partagées
+COPY libs ./libs
 
 # Installer pnpm + dépendances
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --no-frozen-lockfile
 
-# Compiler le backend
+# Compiler le backend uniquement
 RUN pnpm --filter backend build
 
-# Réduire les dépendances à la prod uniquement
+# Nettoyer pour ne garder que les deps prod
 RUN pnpm prune --prod
 
 # Étape 2 : Runner
@@ -30,8 +30,8 @@ COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/apps/backend/dist ./dist
 COPY --from=builder /app/apps/backend/package.json ./package.json
 
-# Exposer le port
-EXPOSE 3000
+# Exposer le port (EduAI backend = 4000)
+EXPOSE 4000
 
 # Lancer l’application
 CMD ["node", "dist/main"]
