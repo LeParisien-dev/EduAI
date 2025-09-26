@@ -24,17 +24,13 @@ FROM node:20-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Installer pnpm
-RUN npm install -g pnpm
-
-# Copier fichiers nécessaires
+# Copier les fichiers de config
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
-COPY apps/backend ./apps/backend
 
-# Installer uniquement les dépendances de prod du backend
-RUN pnpm install --prod --filter backend...
+# Copier le dossier node_modules du builder
+COPY --from=builder /app/node_modules ./node_modules
 
 # Copier les artefacts du build
 COPY --from=builder /app/apps/backend/dist ./dist
