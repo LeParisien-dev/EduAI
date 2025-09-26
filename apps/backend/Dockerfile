@@ -1,37 +1,44 @@
-# Étape 1 : Build
+# Étape 1 : Builder
 FROM node:20-alpine AS builder
 WORKDIR /app
 
-# Copier les fichiers nécessaires
+# Installer pnpm
+RUN npm install -g pnpm
+
+# Copier les fichiers de config
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
+COPY apps/backend/package.json ./apps/backend/package.json
+
+# Installer les dépendances
+RUN pnpm install --frozen-lockfile
+
+# Copier le code source du backend
 COPY apps/backend ./apps/backend
-# COPY libs ./libs   # ❌ supprimé car pas de dossier libs dans EduAI
 
-# Installer pnpm + dépendances
-RUN npm install -g pnpm
-RUN pnpm install --no-frozen-lockfile
-
-# Compiler le backend uniquement
+# Compiler le backend
 RUN pnpm --filter backend build
-
-# Nettoyer pour ne garder que les deps prod
-RUN pnpm prune --prod
 
 # Étape 2 : Runner
 FROM node:20-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copier node_modules depuis le builder
-COPY --from=builder /app/node_modules ./node_modules
+# Installer pnpm
+RUN npm install -g pnpm
 
-# Copier uniquement les artefacts nécessaires
+# Copier uniquement les fichiers nécessaires
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY apps/backend/package.json ./apps/backend/package.json
+
+# Installer seulement les deps de prod
+RUN pnpm install --prod --filter backend...
+
+# Copier les artefacts du build
 COPY --from=builder /app/apps/backend/dist ./dist
-COPY --from=builder /app/apps/backend/package.json ./package.json
 
 # Exposer le port (EduAI backend = 4000)
 EXPOSE 4000
 
-# Lancer l’application
+# Lancer l’app
 CMD ["node", "dist/main"]
