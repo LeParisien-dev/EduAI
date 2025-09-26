@@ -26,11 +26,11 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/backend/package.json ./apps/backend/
 
-# Installer uniquement les dépendances de prod du backend
-RUN pnpm install --filter backend --prod --frozen-lockfile
+# Installer toutes les dépendances de prod du monorepo
+RUN pnpm install --prod --frozen-lockfile
 
-# Copier les artefacts du build backend depuis le builder
+# Copier uniquement les artefacts du backend depuis le builder
 COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
-# Lancer l'application
+# Lancer le backend
 CMD ["node", "apps/backend/dist/main"]
