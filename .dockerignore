@@ -1,0 +1,19 @@
+# Node
+node_modules
+.pnpm-store
+dist
+.npm
+.cache
+
+# Logs
+*.log
+
+# Git
+.git
+.gitignore
+
+# OS
+.DS_Store
+
+# Vercel / build
+.vercel

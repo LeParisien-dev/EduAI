@@ -5,18 +5,13 @@ WORKDIR /app
 # Installer pnpm
 RUN npm install -g pnpm
 
-# Copier les fichiers de config
-COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY tsconfig.base.json ./
-COPY apps/backend/package.json ./apps/backend/package.json
+# Copier tous les fichiers du monorepo
+COPY . .
 
-# Installer les dépendances backend
-RUN pnpm install --frozen-lockfile --filter backend...
+# Installer toutes les dépendances (dev + prod)
+RUN pnpm install --frozen-lockfile
 
-# Copier le code source complet du backend
-COPY apps/backend ./apps/backend
-
-# Compiler le backend
+# Compiler uniquement le backend
 RUN pnpm --filter backend build
 
 # Étape 2 : Runner
@@ -24,19 +19,18 @@ FROM node:20-alpine
 WORKDIR /app
 ENV NODE_ENV=production
 
-# Copier les fichiers de config
+# Installer pnpm
+RUN npm install -g pnpm
+
+# Copier les manifests nécessaires (workspace + backend)
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
-COPY tsconfig.base.json ./
-COPY apps/backend/package.json ./apps/backend/package.json
+COPY apps/backend/package.json ./apps/backend/
 
-# Copier le dossier node_modules du builder
-COPY --from=builder /app/node_modules ./node_modules
+# Installer uniquement les dépendances de prod du backend
+RUN pnpm install --filter backend --prod --frozen-lockfile
 
-# Copier les artefacts du build
-COPY --from=builder /app/apps/backend/dist ./dist
+# Copier les artefacts du build backend depuis le builder
+COPY --from=builder /app/apps/backend/dist ./apps/backend/dist
 
-# Exposer le port (EduAI backend = 4000)
-EXPOSE 4000
-
-# Lancer l’app
-CMD ["node", "dist/main"]
+# Lancer l'application
+CMD ["node", "apps/backend/dist/main"]
