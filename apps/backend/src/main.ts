@@ -14,15 +14,17 @@ async function bootstrap() {
     }),
   );
 
-  // CORS activé pour le frontend local
   app.enableCors({
-    origin: ['http://localhost:5173'],
+    origin: [
+      'http://localhost:5173',
+      'https://edu-ai-frontend-nine.vercel.app/',
+    ],
     credentials: true,
   });
 
   const port = Number(process.env.PORT) || 4000;
   await app.listen(port, '0.0.0.0');
 
-  console.log(`EduAI API running on http://localhost:${port}`);
+  console.log(`EduAI API running on port ${port}`);
 }
 bootstrap();
