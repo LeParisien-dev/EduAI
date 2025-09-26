@@ -6,7 +6,7 @@ WORKDIR /app
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
 COPY apps/backend ./apps/backend
-COPY libs ./libs
+# COPY libs ./libs   # ❌ supprimé car pas de dossier libs dans EduAI
 
 # Installer pnpm + dépendances
 RUN npm install -g pnpm
