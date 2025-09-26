@@ -12,10 +12,7 @@
     "lib": [
       "ES2022",
       "DOM"
-    ],
-    "moduleResolution": "node",
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    ]
   },
   "include": [
     "src",
