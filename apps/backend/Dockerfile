@@ -10,7 +10,7 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
 
-# Installer les dépendances
+# Installer toutes les dépendances
 RUN pnpm install --frozen-lockfile
 
 # Copier le code source du backend
@@ -31,8 +31,8 @@ RUN npm install -g pnpm
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/backend/package.json ./apps/backend/package.json
 
-# Installer seulement les deps de prod
-RUN pnpm install --prod --filter backend...
+# Installer toutes les dépendances de prod (monorepo complet)
+RUN pnpm install --prod
 
 # Copier les artefacts du build
 COPY --from=builder /app/apps/backend/dist ./dist
