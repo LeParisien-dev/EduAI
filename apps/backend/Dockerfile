@@ -10,10 +10,10 @@ COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY tsconfig.base.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
 
-# Installer toutes les dépendances
-RUN pnpm install --frozen-lockfile
+# Installer les dépendances backend
+RUN pnpm install --frozen-lockfile --filter backend...
 
-# Copier le code source du backend
+# Copier le code source complet du backend
 COPY apps/backend ./apps/backend
 
 # Compiler le backend
@@ -27,12 +27,14 @@ ENV NODE_ENV=production
 # Installer pnpm
 RUN npm install -g pnpm
 
-# Copier uniquement les fichiers nécessaires
+# Copier fichiers nécessaires
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
+COPY tsconfig.base.json ./
 COPY apps/backend/package.json ./apps/backend/package.json
+COPY apps/backend ./apps/backend
 
-# Installer toutes les dépendances de prod (monorepo complet)
-RUN pnpm install --prod
+# Installer uniquement les dépendances de prod du backend
+RUN pnpm install --prod --filter backend...
 
 # Copier les artefacts du build
 COPY --from=builder /app/apps/backend/dist ./dist
