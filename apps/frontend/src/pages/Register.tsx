@@ -16,20 +16,22 @@ export default function Register() {
         setError(null);
 
         try {
+            // Step 1: Register user
             await api("/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, username, password }),
             });
 
-            // Auto login after registration
+            // Step 2: Auto-login
             const res = await api("/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
 
-            login(res.access_token);
+            // Store both token and user info
+            login(res.access_token, { email, username });
         } catch (err: any) {
             setError(err.message || "An error occurred");
         } finally {
