@@ -22,7 +22,7 @@ export default function Register() {
                 body: JSON.stringify({ email, username, password }),
             });
 
-            // Après register, login direct
+            // Auto login after registration
             const res = await api("/auth/login", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -31,7 +31,7 @@ export default function Register() {
 
             login(res.access_token);
         } catch (err: any) {
-            setError(err.message || "Une erreur est survenue");
+            setError(err.message || "An error occurred");
         } finally {
             setLoading(false);
         }
@@ -44,7 +44,7 @@ export default function Register() {
                 className="bg-white dark:bg-gray-800 shadow-md rounded-xl p-8 w-96 space-y-5"
             >
                 <h2 className="text-2xl font-bold text-center text-blue-600">
-                    Créer un compte
+                    Create an account
                 </h2>
 
                 {error && (
@@ -53,7 +53,7 @@ export default function Register() {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Nom d’utilisateur
+                        Username
                     </label>
                     <input
                         type="text"
@@ -79,10 +79,39 @@ export default function Register() {
 
                 <div>
                     <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Mot de passe
+                        Password
                     </label>
                     <input
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2
+                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
+                        required
+                        minLength={6}
+                    />
+                </div>
+
+                <button
+                    type="submit"
+                    disabled={loading}
+                    className={`w-full py-2 rounded-md text-white font-medium transition ${loading
+                            ? "bg-blue-400 cursor-not-allowed"
+                            : "bg-blue-600 hover:bg-blue-700"
+                        }`}
+                >
+                    {loading ? "Creating account…" : "Sign up"}
+                </button>
+
+                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
+                    Already have an account?{" "}
+                    <a
+                        href="/login"
+                        className="text-blue-600 hover:underline dark:text-blue-400"
+                    >
+                        Log in
+                    </a>
+                </p>
+            </form>
+        </div>
+    );
+}
