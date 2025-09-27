@@ -21,10 +21,15 @@ export default function Login() {
                 body: JSON.stringify({ email, password }),
             });
 
+            if (!res.access_token) {
+                throw new Error("Invalid server response");
+            }
+
             // Store both token and user email
             login(res.access_token, { email });
         } catch (err: any) {
-            setError(err.message || "Invalid credentials");
+            // Friendly message for the user
+            setError(err.message || "Invalid email or password");
         } finally {
             setLoading(false);
         }
@@ -40,8 +45,11 @@ export default function Login() {
                     Login
                 </h2>
 
+                {/* Error message */}
                 {error && (
-                    <p className="text-red-500 text-sm text-center">{error}</p>
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm text-center">
+                        {error}
+                    </div>
                 )}
 
                 <div>
@@ -54,6 +62,7 @@ export default function Login() {
                         onChange={(e) => setEmail(e.target.value)}
                         className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         required
+                        autoComplete="email"
                     />
                 </div>
 
@@ -67,6 +76,8 @@ export default function Login() {
                         onChange={(e) => setPassword(e.target.value)}
                         className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
                         required
+                        minLength={6}
+                        autoComplete="current-password"
                     />
                 </div>
 
