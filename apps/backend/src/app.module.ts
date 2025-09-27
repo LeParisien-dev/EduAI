@@ -24,8 +24,10 @@ import { AppService } from './app.service';
         url: process.env.DATABASE_URL,
         autoLoadEntities: true,
         synchronize: false, // on passe par les migrations
-        ssl: true,
-        extra: { ssl: { rejectUnauthorized: false } },
+        ssl:
+          process.env.DATABASE_SSL === 'true'
+            ? { rejectUnauthorized: false }
+            : false,
         logging: process.env.NODE_ENV !== 'production',
       }),
     }),
@@ -35,7 +37,6 @@ import { AppService } from './app.service';
     CoursesModule,
     AiModule,
     HealthModule,
-
   ],
   controllers: [AppController],
   providers: [AppService],

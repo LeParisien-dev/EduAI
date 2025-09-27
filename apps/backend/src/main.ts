@@ -17,7 +17,7 @@ async function bootstrap() {
   app.enableCors({
     origin: [
       'http://localhost:5173',
-      'https://edu-ai-frontend-nine.vercel.app/',
+      'https://edu-ai-frontend-nine.vercel.app',
     ],
     credentials: true,
   });
