@@ -15,16 +15,17 @@ export default function Sidebar() {
 
     return (
         <div
-            className="fixed top-16 left-0 h-[calc(100vh-64px)] group"
+            className="fixed top-16 left-0 h-[calc(100vh-4rem)] z-10 group"
             onMouseEnter={() => setIsOpen(true)}
             onMouseLeave={() => setIsOpen(false)}
         >
             <aside
-                className={`bg-gray-50 shadow-md h-full transition-all duration-300 flex flex-col ${isOpen ? "w-48" : "w-12"
-                    }`}
+                className={`h-full transition-all duration-300 flex flex-col border-r border-gray-200 dark:border-gray-700 shadow-sm
+        ${isOpen ? "w-48" : "w-14"}
+        bg-white dark:bg-gray-800`}
             >
                 {/* Navigation */}
-                <nav className="flex flex-col gap-6 mt-8 px-2">
+                <nav className="flex flex-col gap-4 mt-6 px-2">
                     {navItems.map(({ label, icon: Icon, path }) => (
                         <NavLink
                             key={label}
@@ -32,13 +33,15 @@ export default function Sidebar() {
                             className={({ isActive }) =>
                                 `flex items-center gap-3 px-3 py-2 rounded-md transition-colors
                 ${isActive
-                                    ? "bg-primary text-white"
-                                    : "text-gray-500 hover:bg-gray-200"
+                                    ? "bg-blue-600 text-white"
+                                    : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700"
                                 }`
                             }
                         >
                             <Icon size={20} />
-                            {isOpen && <span className="text-sm font-medium">{label}</span>}
+                            {isOpen && (
+                                <span className="text-sm font-medium truncate">{label}</span>
+                            )}
                         </NavLink>
                     ))}
                 </nav>

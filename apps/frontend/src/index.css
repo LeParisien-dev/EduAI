@@ -1,4 +1,6 @@
+/* Import Tailwind v4 layers */
 @import "tailwindcss/preflight";
+@import "tailwindcss/theme";
 @tailwind utilities;
 
 /* Reset & optimisations */
@@ -11,11 +13,11 @@
 
 /* Classes utilitaires globales */
 .card {
-  @apply bg-neutral-card border border-neutral-border rounded-2xl shadow-card p-6;
+  @apply bg-white border border-neutral-200 rounded-2xl shadow-md p-6;
 }
 
 .btn-primary {
-  @apply px-6 py-3 rounded-2xl bg-primary text-white font-semibold hover:bg-primary-light transition;
+  @apply px-6 py-3 rounded-2xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition;
 }
 
 .badge {
