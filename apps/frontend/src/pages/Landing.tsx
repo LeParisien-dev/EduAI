@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api } from "../api/index.ts";
+import { Link } from "react-router-dom"; // ✅ Import Link
 
 interface Course {
     id: string;
@@ -29,7 +30,6 @@ export default function Landing() {
     if (loading) {
         return (
             <div className="flex flex-col items-center justify-center h-64">
-                {/* Spinner */}
                 <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
                 <p className="mt-4 text-gray-500">Chargement des cours…</p>
             </div>
@@ -72,13 +72,13 @@ export default function Landing() {
             {/* CTA enseignant */}
             <p className="text-center mt-10">
                 <span className="text-gray-400">Vous êtes enseignant ?</span>{" "}
-                <a href="/register" className="text-cyan-400 hover:underline">
+                <Link to="/register" className="text-cyan-400 hover:underline">
                     Créez un compte
-                </a>{" "}
+                </Link>{" "}
                 ou{" "}
-                <a href="/login" className="text-cyan-400 hover:underline">
+                <Link to="/login" className="text-cyan-400 hover:underline">
                     connectez-vous
-                </a>{" "}
+                </Link>{" "}
                 pour ajouter vos propres cours.
             </p>
         </main>
