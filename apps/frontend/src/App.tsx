@@ -16,8 +16,8 @@ import Profiles from "./pages/Profiles.tsx";
 
 function App() {
   return (
-    <AuthProvider>
-      <BrowserRouter>
+    <BrowserRouter>
+      <AuthProvider>
         <Routes>
           {/* Public pages */}
           <Route path="/login" element={<Login />} />
@@ -121,8 +121,8 @@ function App() {
             }
           />
         </Routes>
-      </BrowserRouter>
-    </AuthProvider>
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 
