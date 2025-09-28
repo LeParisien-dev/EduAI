@@ -1,4 +1,10 @@
-import { createContext, useState, useContext, ReactNode } from "react";
+import {
+    createContext,
+    useState,
+    useContext,
+    useEffect,
+    ReactNode,
+} from "react";
 
 interface User {
     email: string;
@@ -20,16 +26,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     );
     const [user, setUser] = useState<User | null>(null);
 
+    // Restore user from localStorage on refresh
+    useEffect(() => {
+        const savedUser = localStorage.getItem("user");
+        if (savedUser) {
+            setUser(JSON.parse(savedUser));
+        }
+    }, []);
+
     const login = (t: string, u?: User) => {
         setToken(t);
         localStorage.setItem("token", t);
-        if (u) setUser(u);
+
+        if (u) {
+            setUser(u);
+            localStorage.setItem("user", JSON.stringify(u));
+        }
+
+        console.log("User logged in:", u);
+        // Redirect after login
+        window.location.href = "/courses";
     };
 
     const logout = () => {
         setToken(null);
         setUser(null);
         localStorage.removeItem("token");
+        localStorage.removeItem("user");
+
+        console.log("User logged out");
+        window.location.href = "/login";
     };
 
     return (
