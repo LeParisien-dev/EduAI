@@ -17,11 +17,12 @@ export default function Register() {
 
         try {
             // Step 1: Register user
-            await api("/auth/register", {
+            const registerRes = await api("/auth/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, username, password }),
             });
+            console.log("✅ Register response:", registerRes);
 
             // Step 2: Auto-login
             const res = await api("/auth/login", {
@@ -29,14 +30,18 @@ export default function Register() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
             });
+            console.log("Login response:", res);
 
             if (!res.access_token) {
-                throw new Error("Invalid server response");
+                console.error("No access_token in response:", res);
+                throw new Error("Invalid server response (no access_token)");
             }
 
             // Store both token and user info
             login(res.access_token, { email, username });
+            console.log("User logged in successfully!");
         } catch (err: any) {
+            console.error("Auth error:", err);
             setError(err.message || "An error occurred");
         } finally {
             setLoading(false);
@@ -107,8 +112,8 @@ export default function Register() {
                     type="submit"
                     disabled={loading}
                     className={`w-full py-2 rounded-md text-white font-medium transition ${loading
-                            ? "bg-blue-400 cursor-not-allowed"
-                            : "bg-blue-600 hover:bg-blue-700"
+                        ? "bg-blue-400 cursor-not-allowed"
+                        : "bg-blue-600 hover:bg-blue-700"
                         }`}
                 >
                     {loading ? "Creating account…" : "Sign up"}
