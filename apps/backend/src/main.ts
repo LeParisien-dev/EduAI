@@ -14,10 +14,12 @@ async function bootstrap() {
     }),
   );
 
+  // CORS configuration (local + Vercel frontend)
   app.enableCors({
     origin: [
-      'http://localhost:5173',
-      'https://edu-ai-frontend-nine.vercel.app',
+      'http://localhost:5173',                   // Dev local
+      'https://edu-ai-frontend-nine.vercel.app', // Domaine Vercel actuel
+      'https://eduai-frontend.vercel.app',
     ],
     credentials: true,
   });
