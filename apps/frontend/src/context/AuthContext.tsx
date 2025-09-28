@@ -5,7 +5,6 @@ import {
     useEffect,
     ReactNode,
 } from "react";
-import { useNavigate } from "react-router-dom";
 
 interface User {
     email: string;
@@ -26,7 +25,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.getItem("token")
     );
     const [user, setUser] = useState<User | null>(null);
-    const navigate = useNavigate();
 
     // Restore user from localStorage on refresh
     useEffect(() => {
@@ -44,10 +42,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setUser(u);
             localStorage.setItem("user", JSON.stringify(u));
         }
-
-        console.log("User logged in:", u);
-        // Redirect after login (handled by React Router, no 404)
-        navigate("/courses");
     };
 
     const logout = () => {
@@ -55,9 +49,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(null);
         localStorage.removeItem("token");
         localStorage.removeItem("user");
-
-        console.log("User logged out");
-        navigate("/login");
     };
 
     return (

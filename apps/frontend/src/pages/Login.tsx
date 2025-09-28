@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { api } from "../api/index.ts";
 import { useAuth } from "../context/AuthContext.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
     const { login } = useAuth();
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false);
@@ -27,8 +29,10 @@ export default function Login() {
 
             // Store both token and user email
             login(res.access_token, { email });
+
+            // Redirect to courses page
+            navigate("/courses");
         } catch (err: any) {
-            // Friendly message for the user
             setError(err.message || "Invalid email or password");
         } finally {
             setLoading(false);
@@ -45,62 +49,39 @@ export default function Login() {
                     Login
                 </h2>
 
-                {/* Error message */}
                 {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm text-center">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm text-center">
                         {error}
                     </div>
                 )}
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                        autoComplete="email"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                        minLength={6}
-                        autoComplete="current-password"
-                    />
-                </div>
+                {/* Inputs */}
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="border p-2 w-full rounded mb-3"
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border p-2 w-full rounded mb-3"
+                    required
+                    minLength={6}
+                />
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full py-2 rounded-md text-white font-medium transition ${loading
-                            ? "bg-blue-400 cursor-not-allowed"
-                            : "bg-blue-600 hover:bg-blue-700"
+                    className={`w-full py-2 rounded-md text-white font-medium ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
                         }`}
                 >
                     {loading ? "Logging in…" : "Log in"}
                 </button>
-
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                    No account yet?{" "}
-                    <a
-                        href="/register"
-                        className="text-blue-600 hover:underline dark:text-blue-400"
-                    >
-                        Create one
-                    </a>
-                </p>
             </form>
         </div>
     );

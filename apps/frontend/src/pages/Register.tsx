@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { api } from "../api/index.ts";
 import { useAuth } from "../context/AuthContext.tsx";
+import { useNavigate } from "react-router-dom";
 
 export default function Register() {
     const { login } = useAuth();
+    const navigate = useNavigate();
     const [email, setEmail] = useState("");
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -22,7 +24,7 @@ export default function Register() {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, username, password }),
             });
-            console.log("✅ Register response:", registerRes);
+            console.log("Register response:", registerRes);
 
             // Step 2: Auto-login
             const res = await api("/auth/login", {
@@ -33,13 +35,14 @@ export default function Register() {
             console.log("Login response:", res);
 
             if (!res.access_token) {
-                console.error("No access_token in response:", res);
                 throw new Error("Invalid server response (no access_token)");
             }
 
             // Store both token and user info
             login(res.access_token, { email, username });
-            console.log("User logged in successfully!");
+
+            // Redirect to courses page
+            navigate("/courses");
         } catch (err: any) {
             console.error("Auth error:", err);
             setError(err.message || "An error occurred");
@@ -58,76 +61,47 @@ export default function Register() {
                     Create an account
                 </h2>
 
-                {/* Error message */}
                 {error && (
-                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded relative text-sm text-center">
+                    <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-2 rounded text-sm text-center">
                         {error}
                     </div>
                 )}
 
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Username
-                    </label>
-                    <input
-                        type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                        autoComplete="username"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Email
-                    </label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                        autoComplete="email"
-                    />
-                </div>
-
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
-                        Password
-                    </label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        className="border border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 p-2 w-full rounded focus:ring-2 focus:ring-blue-500 focus:outline-none"
-                        required
-                        minLength={6}
-                        autoComplete="new-password"
-                    />
-                </div>
+                {/* Inputs */}
+                <input
+                    type="text"
+                    placeholder="Username"
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    className="border p-2 w-full rounded mb-3"
+                    required
+                />
+                <input
+                    type="email"
+                    placeholder="Email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="border p-2 w-full rounded mb-3"
+                    required
+                />
+                <input
+                    type="password"
+                    placeholder="Password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    className="border p-2 w-full rounded mb-3"
+                    required
+                    minLength={6}
+                />
 
                 <button
                     type="submit"
                     disabled={loading}
-                    className={`w-full py-2 rounded-md text-white font-medium transition ${loading
-                        ? "bg-blue-400 cursor-not-allowed"
-                        : "bg-blue-600 hover:bg-blue-700"
+                    className={`w-full py-2 rounded-md text-white font-medium ${loading ? "bg-blue-400" : "bg-blue-600 hover:bg-blue-700"
                         }`}
                 >
                     {loading ? "Creating account…" : "Sign up"}
                 </button>
-
-                <p className="text-center text-sm text-gray-500 dark:text-gray-400">
-                    Already have an account?{" "}
-                    <a
-                        href="/login"
-                        className="text-blue-600 hover:underline dark:text-blue-400"
-                    >
-                        Log in
-                    </a>
-                </p>
             </form>
         </div>
     );
