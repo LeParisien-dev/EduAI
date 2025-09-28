@@ -42,6 +42,13 @@ export class CoursesService {
         };
     }
 
+    // ✅ Nouveau : liste tous les cours (peu importe le statut)
+    async findAll(): Promise<Course[]> {
+        return this.coursesRepo.find({
+            order: { createdAt: 'DESC' },
+        });
+    }
+
     async findPublished(): Promise<Course[]> {
         return this.coursesRepo.find({
             where: { status: 'published' },

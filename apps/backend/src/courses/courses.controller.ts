@@ -1,4 +1,13 @@
-import { Controller, Post, Body, Get, Param, Patch, UseGuards, Request } from '@nestjs/common';
+import {
+  Controller,
+  Post,
+  Body,
+  Get,
+  Param,
+  Patch,
+  UseGuards,
+  Request,
+} from '@nestjs/common';
 import { CoursesService } from './courses.service';
 import { CreateCourseDto } from './dto/create-course.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
@@ -17,6 +26,12 @@ export class CoursesController {
   @Post()
   create(@Body() dto: CreateCourseDto, @Request() req: AuthenticatedRequest) {
     return this.coursesService.create(dto, req.user);
+  }
+
+  // endpoint pour supporter api("/courses")
+  @Get()
+  findAll() {
+    return this.coursesService.findAll();
   }
 
   @Get('published')
